@@ -47,7 +47,7 @@ const sampleItem: ShoppingListItemRow = {
   added_by: 1,
   is_checked: false,
   checked_at: null,
-  created_at: "2026-08-18T10:00:00.000Z",
+  created_at: new Date("2026-08-18T10:00:00.000Z"),
 };
 
 const checkedItem: ShoppingListItemRow = {
@@ -57,8 +57,8 @@ const checkedItem: ShoppingListItemRow = {
   product_id: 10,
   added_by: 1,
   is_checked: true,
-  checked_at: "2026-08-18T10:30:00.000Z",
-  created_at: "2026-08-18T10:00:00.000Z",
+  checked_at: new Date("2026-08-18T10:30:00.000Z"),
+  created_at: new Date("2026-08-18T10:00:00.000Z"),
 };
 
 const looseItem: ShoppingListItemRow = {
@@ -69,7 +69,7 @@ const looseItem: ShoppingListItemRow = {
   added_by: 1,
   is_checked: false,
   checked_at: null,
-  created_at: "2026-08-18T10:05:00.000Z",
+  created_at: new Date("2026-08-18T10:05:00.000Z"),
 };
 
 describe("shopping-list resource", () => {
@@ -330,6 +330,23 @@ describe("shopping-list resource", () => {
       expect(res.status).toBe(404);
       expect(mockedUpdateShoppingListItem).toHaveBeenCalledWith(999, {
         name: "Pears",
+      });
+    });
+
+    it("is_checked cannot be updated via general PATCH (stripped by validator)", async () => {
+      mockedUpdateShoppingListItem.mockResolvedValue(sampleItem);
+
+      const res = await request(app)
+        .patch("/shopping-list/1")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          name: "Apples",
+          is_checked: true,
+        });
+
+      expect(res.status).toBe(200);
+      expect(mockedUpdateShoppingListItem).toHaveBeenCalledWith(1, {
+        name: "Apples",
       });
     });
 

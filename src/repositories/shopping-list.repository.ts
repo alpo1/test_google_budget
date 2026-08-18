@@ -8,8 +8,8 @@ export interface ShoppingListItemRow {
   product_id: number | null;
   added_by: number | null;
   is_checked: boolean;
-  checked_at: string | null;
-  created_at: string;
+  checked_at: Date | null;
+  created_at: Date;
 }
 
 export interface CreateShoppingListItemData {
