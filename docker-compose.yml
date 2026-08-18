@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: procure
+      POSTGRES_PASSWORD: procure
+      POSTGRES_DB: procure
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  app:
+    build: .
+    depends_on:
+      - postgres
+      - mongo
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      POSTGRES_URL: postgres://procure:procure@postgres:5432/procure
+      MONGO_URL: mongodb://mongo:27017/procure
+      JWT_SECRET: change_me_in_production
+      JWT_EXPIRES_IN: 1h
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:
+  mongodata:

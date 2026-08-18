@@ -1,0 +1,6 @@
+{
+  "name": "Home Budget API",
+  "description": "REST API for managing personal household budget, receipts, store chains, categories, and shopping lists",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+        env:
+          JWT_SECRET: test-only-secret-do-not-use
+          JWT_EXPIRES_IN: 1h
+          POSTGRES_URL: postgres://test:test@localhost:5432/test_db
+          MONGO_URL: mongodb://localhost:27017/test_db
+          POSTGRES_SSL: "false"
